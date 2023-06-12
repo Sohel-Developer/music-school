@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors')
 const app = express()
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const port = process.env.PORT || 5000;
@@ -6,6 +7,11 @@ const port = process.env.PORT || 5000;
 
 // musicSchoolAdmin
 // Ny77UgEWZLEdqZkQ
+
+/* Middelware */
+
+app.use(cors())
+app.use(express.json())
 
 
 
@@ -28,7 +34,26 @@ async function run() {
         await client.connect();
 
 
+        const usersCollection = client.db("musicSchoolDB").collection("users")
 
+
+
+
+
+        app.post('/users', async (req, res) => {
+
+            const user = req.body;
+            console.log(user);
+            // const query = { email: user.email }
+            // const existingUser = await usersCollection.findOne(query);
+
+            // if (existingUser) {
+            //     return res.send({ message: 'user already exists' })
+            // }
+
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
+        })
 
 
 

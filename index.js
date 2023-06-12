@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors')
 const app = express()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 
 
@@ -40,6 +40,20 @@ async function run() {
         app.get('/users', async (req, res) => {
             const result = await usersCollection.find().toArray();
             res.send(result)
+
+        })
+
+        app.patch('/users/admin/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                    role: 'admin'
+                },
+            };
+
+            const result = await usersCollection.updateOne(filter, updateDoc);
+            res.send(result);
 
         })
 

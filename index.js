@@ -37,6 +37,11 @@ async function run() {
         const usersCollection = client.db("musicSchoolDB").collection("users")
 
 
+        app.get('/users', async (req, res) => {
+            const result = await usersCollection.find().toArray();
+            res.send(result)
+
+        })
 
 
 

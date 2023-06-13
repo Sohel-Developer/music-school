@@ -56,6 +56,7 @@ async function run() {
 
 
         const usersCollection = client.db("musicSchoolDB").collection("users")
+        const classesCollection = client.db("musicSchoolDB").collection("classes")
 
 
 
@@ -139,6 +140,16 @@ async function run() {
             }
 
             const result = await usersCollection.insertOne(user);
+            res.send(result);
+        })
+
+
+        app.post('/class', async (req, res) => {
+
+            const data = req.body;
+
+            const result = await classesCollection.insertOne(data);
+            console.log(result, data);
             res.send(result);
         })
 

@@ -157,8 +157,6 @@ async function run() {
             const query = { instructorEmail: email }
 
             const result = await classesCollection.find(query).toArray();
-
-            console.log(result);
             res.send(result);
         })
 
@@ -167,7 +165,22 @@ async function run() {
             const data = req.body;
 
             const result = await classesCollection.insertOne(data);
-            console.log(result, data);
+            res.send(result);
+        })
+
+        app.patch('/class/:id', async (req, res) => {
+
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const options = { upsert: true };
+
+            console.log(query);
+            const updateDoc = {
+                $set: {
+                    status: 'approve'
+                },
+            };
+            const result = await classesCollection.updateOne(query, updateDoc, options);
             res.send(result);
         })
 

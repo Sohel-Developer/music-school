@@ -88,7 +88,6 @@ async function run() {
             const query = { email: email }
             const user = await usersCollection.findOne(query);
             const result = { admin: user?.role === 'admin' }
-            console.log(result);
             res.send(result);
         })
 
@@ -102,7 +101,6 @@ async function run() {
             const query = { email: email }
             const user = await usersCollection.findOne(query);
             const result = { instructor: user?.role === 'instructor' }
-            console.log(result);
             res.send(result);
         })
 
@@ -143,6 +141,26 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/classes', async (req, res) => {
+
+            const result = await classesCollection.find().toArray();
+
+            res.send(result);
+        })
+
+
+
+
+        app.get('/classes/:email', async (req, res) => {
+            const email = req.params.email;
+
+            const query = { instructorEmail: email }
+
+            const result = await classesCollection.find(query).toArray();
+
+            console.log(result);
+            res.send(result);
+        })
 
         app.post('/class', async (req, res) => {
 

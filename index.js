@@ -57,6 +57,7 @@ async function run() {
 
         const usersCollection = client.db("musicSchoolDB").collection("users")
         const classesCollection = client.db("musicSchoolDB").collection("classes")
+        const selectedCollection = client.db("musicSchoolDB").collection("selected")
 
 
 
@@ -162,6 +163,13 @@ async function run() {
         })
 
 
+        app.get('/selected/classes', async (req, res) => {
+
+            const result = await selectedCollection.find().toArray();
+
+            res.send(result);
+        })
+
 
 
         app.get('/classes/:email', async (req, res) => {
@@ -181,19 +189,34 @@ async function run() {
             res.send(result);
         })
 
+        app.post('/class/selected', async (req, res) => {
+            const data = req.body;
+            const result = await selectedCollection.insertOne(data);
+            res.send(result);
+        })
+
+
         app.patch('/class/:id', async (req, res) => {
 
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const options = { upsert: true };
-
-            console.log(query);
             const updateDoc = {
                 $set: {
                     status: 'approve'
                 },
             };
             const result = await classesCollection.updateOne(query, updateDoc, options);
+            res.send(result);
+        })
+
+        app.delete('/class/delete/:id', async (req, res) => {
+            const id = req.params.id;
+
+            const filter = { _id: id }
+
+            const result = await selectedCollection.deleteOne(filter);
+
             res.send(result);
         })
 

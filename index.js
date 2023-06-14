@@ -92,9 +92,11 @@ async function run() {
         app.get('/users/instructor/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
 
-            if (req.decoded.email !== email) {
-                res.send({ admin: false })
-            }
+            // TODo: Change Code Check Live Server
+
+            // if (req.decoded.email !== email) {
+            //     res.send({ admin: false })
+            // }
 
             const query = { email: email }
             const user = await usersCollection.findOne(query);
@@ -105,6 +107,16 @@ async function run() {
 
         app.get('/users', verifyJWT, verifyAdmin, async (req, res) => {
             const result = await usersCollection.find().toArray();
+            res.send(result)
+
+        })
+
+        // TODO Check Api
+        app.get('/users/instructor', async (req, res) => {
+
+            const query = { role: "instructor" }
+
+            const result = await usersCollection.find(query).toArray();
             res.send(result)
 
         })

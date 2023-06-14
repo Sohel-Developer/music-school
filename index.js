@@ -91,13 +91,6 @@ async function run() {
 
         app.get('/users/instructor/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
-
-            // TODo: Change Code Check Live Server
-
-            // if (req.decoded.email !== email) {
-            //     res.send({ admin: false })
-            // }
-
             const query = { email: email }
             const user = await usersCollection.findOne(query);
             const result = { instructor: user?.role === 'instructor' }
@@ -175,9 +168,7 @@ async function run() {
         app.get('/selected/classes/:email', async (req, res) => {
 
             const email = req.params.email;
-
             const query = { studentEmail: email }
-
             const result = await selectedCollection.find(query).toArray();
 
             res.send(result);
@@ -187,17 +178,13 @@ async function run() {
 
         app.get('/classes/:email', async (req, res) => {
             const email = req.params.email;
-
             const query = { instructorEmail: email }
-
             const result = await classesCollection.find(query).toArray();
             res.send(result);
         })
 
         app.post('/class', async (req, res) => {
-
             const data = req.body;
-
             const result = await classesCollection.insertOne(data);
             res.send(result);
         })

@@ -163,9 +163,13 @@ async function run() {
         })
 
 
-        app.get('/selected/classes', async (req, res) => {
+        app.get('/selected/classes/:email', async (req, res) => {
 
-            const result = await selectedCollection.find().toArray();
+            const email = req.params.email;
+
+            const query = { studentEmail: email }
+
+            const result = await selectedCollection.find(query).toArray();
 
             res.send(result);
         })
@@ -212,9 +216,7 @@ async function run() {
 
         app.delete('/class/delete/:id', async (req, res) => {
             const id = req.params.id;
-
-            const filter = { _id: id }
-
+            const filter = { _id: new ObjectId(id) }
             const result = await selectedCollection.deleteOne(filter);
 
             res.send(result);
